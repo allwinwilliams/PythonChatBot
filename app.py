@@ -1,4 +1,4 @@
-import wikipedia, nltk
+import wikipedia, nltk, re
 from bottle import route, run, get, post, request # or route
 from bottle import template
 @route('/')
@@ -6,11 +6,10 @@ def hello():
     return '''
             <h1>Hello World!</h1>
             <a href='./app'>go to app</a>
-
           '''
 @get('/app')
 def app(reply=""):
-    return template('./veiws/app',reply=reply)
+    return template('./views/app',reply=reply)
 @post('/app')
 def reply(reply=""):
     myRequest = request.forms.get('myRequest')
@@ -19,6 +18,7 @@ def reply(reply=""):
         title = find_between( myRequest, "what is", "?" )
         print title
         result = wikipedia.summary(title, sentences=1)
+        print "result"+result
         reply = result
     else:
         tokens = nltk.word_tokenize(myRequest)
